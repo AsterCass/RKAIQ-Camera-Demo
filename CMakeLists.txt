@@ -41,6 +41,7 @@ else ()
             -lrkaiq -leasymedia -ldrm -lrockchip_mpp -lavformat -lavcodec -lswresample -lavutil -lasound
             -lRKAP_3A -lRKAP_ANR -lRKAP_Common -lv4l2 -lrga -lmd_share -lod_share -lrkaiq -lz -lv4lconvert -ljpeg
             -lVSC_Lite -lGAL -lArchModelSw -lNNArchPerf -lOpenVX -lrknn_runtime -lrknn_api
+            -lpthread
     )
 
 endif ()

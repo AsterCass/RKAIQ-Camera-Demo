@@ -45,7 +45,7 @@ int main() {
     for (int i = 0; i < 10; i++) {
         if (aiq_control_get_status(AIQ_CONTROL_RGB)) {
             printf("%s: RGB aiq status ok.\n", __func__);
-            //camrgb_control_init();
+            camrgb_control_init();
             break;
         }
         sleep(1);

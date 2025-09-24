@@ -32,6 +32,9 @@
  */
 #include <pthread.h>
 #include "camrgb_control.h"
+#include <rkaiq/rkisp_api.h>
+#include <stdio.h>
+#include <rga/rga.h>
 
 
 static bool g_def_expo_weights = false;
@@ -50,26 +53,75 @@ static display_callback g_display_cb = NULL;
 static pthread_mutex_t g_display_lock = PTHREAD_MUTEX_INITIALIZER;
 static int g_rotation = HAL_TRANSFORM_ROT_90;
 
-void set_rgb_rotation(int angle)
-{
+void set_rgb_rotation(int angle) {
     if (angle == 90)
         g_rotation = HAL_TRANSFORM_ROT_90;
     else if (angle == 270)
         g_rotation = HAL_TRANSFORM_ROT_270;
 }
 
-void set_rgb_display(display_callback cb)
-{
+void set_rgb_display(display_callback cb) {
     pthread_mutex_lock(&g_display_lock);
     g_display_cb = cb;
     pthread_mutex_unlock(&g_display_lock);
 }
 
-void set_rgb_param(int width, int height, display_callback cb, bool expo)
-{
+void set_rgb_param(int width, int height, display_callback cb, bool expo) {
     g_rgb_en = true;
     g_rgb_width = width;
     g_rgb_height = height;
     set_rgb_display(cb);
     g_expo_weights_en = expo;
+}
+
+static void *process(void *arg) {
+    int id = 0;
+    do {
+        id++;
+        buf = rkisp_get_frame(ctx, 0);
+
+        // if (!rockface_control_convert_detect(buf->buf, ctx->width, ctx->height, RK_FORMAT_YCbCr_420_SP, g_rotation, id))
+        //     rockface_control_convert_feature(buf->buf, ctx->width, ctx->height, RK_FORMAT_YCbCr_420_SP, g_rotation, id);
+
+        pthread_mutex_lock(&g_display_lock);
+        if (g_display_cb)
+            g_display_cb(buf->buf, buf->fd, RK_FORMAT_YCbCr_420_SP,
+                         ctx->width, ctx->height, g_rotation);
+        pthread_mutex_unlock(&g_display_lock);
+
+        rkisp_put_frame(ctx, buf);
+    } while (g_run);
+
+    pthread_exit(NULL);
+}
+
+
+int camrgb_control_init(void) {
+    int id = -1;
+    char name[32];
+
+    if (!g_rgb_en)
+        return 0;
+
+
+    ctx = rkisp_open_device2(CAM_TYPE_RKISP1);
+    if (ctx == NULL) {
+        printf("%s: ctx is NULL\n", __func__);
+        return -1;
+    }
+
+    rkisp_set_buf(ctx, 3, NULL, 0);
+
+    rkisp_set_fmt(ctx, g_rgb_width, g_rgb_height, V4L2_PIX_FMT_NV12);
+
+    if (rkisp_start_capture(ctx))
+        return -1;
+
+    g_run = true;
+    if (pthread_create(&g_tid, NULL, process, NULL)) {
+        printf("pthread_create fail\n");
+        return -1;
+    }
+
+    return 0;
 }

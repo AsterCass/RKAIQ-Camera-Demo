@@ -46,6 +46,8 @@ extern "C" {
 
     void set_rgb_param(int width, int height, display_callback cb, bool expo);
 
+    int camrgb_control_init();
+
 #ifdef __cplusplus
 }
 #endif
