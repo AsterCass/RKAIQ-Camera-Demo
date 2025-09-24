@@ -42,12 +42,8 @@
 #include <list>
 
 #include "aiq_control.h"
-
-#include <pthread.h>
 #include <mediactl/mediactl.h>
 #include <mediactl/v4l2subdev.h>
-
-#include "common.h"
 
 #define IQFILES_PATH "/etc/iqfiles"
 #define AIQ_FILE_PATH_LEN 64

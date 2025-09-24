@@ -37,6 +37,7 @@
 extern "C" {
 #endif
 
+#include "common.h"
 #include <rk_aiq_user_api_sysctl.h>
 #include <rk_aiq_user_api_imgproc.h>
 
