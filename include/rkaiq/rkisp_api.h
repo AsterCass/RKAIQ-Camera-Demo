@@ -1,6 +1,7 @@
 #ifndef __RKISP_API_CTX__
 #define __RKISP_API_CTX__
 
+#include <stdint.h>
 #include <linux/media-bus-format.h>
 #include <linux/videodev2.h>
 #include <sys/time.h>

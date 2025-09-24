@@ -30,7 +30,7 @@ int main() {
     set_rgb_rotation(90);
 
     display_switch(DISPLAY_VIDEO_RGB);
-    if (display_init(500, 500)) {
+    if (display_init(800, 1280)) {
         printf("Init failed\n");
         return -1;
     }
@@ -54,7 +54,7 @@ int main() {
     for (int i = 0; i < 10; i++) {
         if (aiq_control_get_status(AIQ_CONTROL_IR)) {
             printf("%s: IR aiq status ok.\n", __func__);
-            // camir_control_init();
+            camir_control_init();
             break;
         }
         sleep(1);

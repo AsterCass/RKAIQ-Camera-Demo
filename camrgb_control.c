@@ -75,9 +75,7 @@ void set_rgb_param(int width, int height, display_callback cb, bool expo) {
 }
 
 static void *process(void *arg) {
-    int id = 0;
     do {
-        id++;
         buf = rkisp_get_frame(ctx, 0);
 
         // if (!rockface_control_convert_detect(buf->buf, ctx->width, ctx->height, RK_FORMAT_YCbCr_420_SP, g_rotation, id))
@@ -97,9 +95,6 @@ static void *process(void *arg) {
 
 
 int camrgb_control_init(void) {
-    int id = -1;
-    char name[32];
-
     if (!g_rgb_en)
         return 0;
 
