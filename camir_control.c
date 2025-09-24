@@ -5,7 +5,6 @@
 #include <rkaiq/rkisp_api.h>
 #include <rga/rga.h>
 #include <linux/media-bus-format.h>
-#include <rga/drmrga.h>
 
 #include "common.h"
 
