@@ -7,19 +7,19 @@ project(theTest LANGUAGES C)
 
 #add_definitions(-DRKAIQ)
 
+
 if (WIN32)
-    set(RK_ROOT ./)
+    include_directories(
+            ./include
+    )
 else ()
-    set(RK_ROOT ./)
+    include_directories(
+            ./include
+    )
+    link_directories(
+            /data/src/rockchip/_install//lib
+    )
 endif ()
-
-
-include_directories(
-        ${RK_ROOT}/include
-)
-link_directories(
-        ${RK_ROOT}/lib
-)
 
 
 set(PROJECT_SOURCES

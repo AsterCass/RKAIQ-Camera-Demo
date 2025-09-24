@@ -1,5 +1,8 @@
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <unistd.h>
+
 #include "camir_control.h"
 #include "camrgb_control.h"
 #include "display.h"
@@ -8,6 +11,14 @@
 #define CAMERA_WIDTH 1280
 #define CAMERA_HEIGHT 720
 #define SAVE_FRAMES 30
+
+
+static bool quit = false;
+
+static void sigterm_handler(int sig) {
+    fprintf(stderr, "signal %d\n", sig);
+    quit = true;
+}
 
 
 int main() {
@@ -25,6 +36,11 @@ int main() {
 
     printf("Init finish\n");
 
+
+    signal(SIGINT, sigterm_handler);
+    while (!quit) {
+        usleep(500000);
+    }
 
     return 0;
 }
