@@ -53,7 +53,7 @@ void getIrFrame(void *buf, int width, int height, int cnt) {
         cv::Mat yuv(height * 3 / 2, width, CV_8UC1, yuv_data);
         cv::Mat bgr;
         cv::cvtColor(yuv, bgr, cv::COLOR_YUV2BGR_NV12);
-        cv::rotate(bgr, bgr, cv::ROTATE_90_CLOCKWISE);
+        cv::rotate(bgr, bgr, cv::ROTATE_90_COUNTERCLOCKWISE);
 
         cv::imwrite("/data/frd/ir-" + std::to_string(cnt) + ".jpg", bgr);
     }
