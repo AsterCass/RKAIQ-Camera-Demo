@@ -35,6 +35,7 @@
 #include <rkaiq/rkisp_api.h>
 #include <stdio.h>
 #include <rga/rga.h>
+#include <opencv2/opencv.hpp>
 
 
 static bool g_def_expo_weights = false;
@@ -74,12 +75,33 @@ void set_rgb_param(int width, int height, display_callback cb, bool expo) {
     g_expo_weights_en = expo;
 }
 
+void getRgbFrame(void *buf, int width, int height, int cnt) {
+    time_t now;
+    time(&now);
+    static time_t lastTime = 0;
+    if (now - lastTime > 5) {
+        lastTime = now;
+
+        uint8_t *yuv_data = (uint8_t *) buf;
+        cv::Mat yuv(height * 3 / 2, width, CV_8UC1, yuv_data);
+        cv::Mat bgr;
+        cv::cvtColor(yuv, bgr, cv::COLOR_YUV2BGR_NV12);
+        cv::rotate(bgr, bgr, cv::ROTATE_90_CLOCKWISE);
+
+        cv::imwrite("/data/frd/rgb-" + std::to_string(cnt) + ".jpg", bgr);
+    }
+}
+
+
 static void *process(void *arg) {
+    static int cnt = 0;
     do {
+        ++cnt;
         buf = rkisp_get_frame(ctx, 0);
 
         // if (!rockface_control_convert_detect(buf->buf, ctx->width, ctx->height, RK_FORMAT_YCbCr_420_SP, g_rotation, id))
         //     rockface_control_convert_feature(buf->buf, ctx->width, ctx->height, RK_FORMAT_YCbCr_420_SP, g_rotation, id);
+        getRgbFrame(buf->buf, ctx->width, ctx->height, cnt);
 
         pthread_mutex_lock(&g_display_lock);
         if (g_display_cb)
