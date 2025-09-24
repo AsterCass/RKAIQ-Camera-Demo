@@ -10,7 +10,7 @@ project(theTest LANGUAGES C)
 if (WIN32)
     set(RK_ROOT ./)
 else ()
-    set(RK_ROOT /data/src/rockchip/_install)
+    set(RK_ROOT ./)
 endif ()
 
 
