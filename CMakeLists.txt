@@ -24,6 +24,11 @@ link_directories(
 
 set(PROJECT_SOURCES
         main.c
+        camir_control.c
+        camrgb_control.c
+        display.c
+        rkdrm_display.c
+
 )
 
 add_executable(theTest

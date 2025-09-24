@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "camir_control.h"
 #include "camrgb_control.h"
+#include "display.h"
 
 
 #define CAMERA_WIDTH 1280
@@ -16,7 +17,14 @@ int main() {
     set_ir_param(CAMERA_WIDTH, CAMERA_HEIGHT, NULL);
     set_rgb_rotation(90);
 
+    display_switch(DISPLAY_VIDEO_RGB);
+    if (display_init(500, 500)) {
+        printf("Init failed\n");
+        return -1;
+    }
+
     printf("Init finish\n");
+
 
     return 0;
 }
