@@ -1,7 +1,8 @@
 #include <signal.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <rga/RgaApi.h>
+#include "aiq_control.h"
 
 #include "camir_control.h"
 #include "camrgb_control.h"
@@ -34,8 +35,32 @@ int main() {
         return -1;
     }
 
-    printf("Init finish\n");
+    printf("Init display finish\n");
 
+    if (c_RkRgaInit()) {
+        printf("%s: rga init fail!\n", __func__);
+    }
+
+    aiq_control_alloc();
+    for (int i = 0; i < 10; i++) {
+        if (aiq_control_get_status(AIQ_CONTROL_RGB)) {
+            printf("%s: RGB aiq status ok.\n", __func__);
+            //camrgb_control_init();
+            break;
+        }
+        sleep(1);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        if (aiq_control_get_status(AIQ_CONTROL_IR)) {
+            printf("%s: IR aiq status ok.\n", __func__);
+            // camir_control_init();
+            break;
+        }
+        sleep(1);
+    }
+
+    printf("Init aiq finish\n");
 
     signal(SIGINT, sigterm_handler);
     while (!quit) {

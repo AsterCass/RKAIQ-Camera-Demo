@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(theTest LANGUAGES C)
+project(theTest)
 
-#set(CMAKE_CXX_STANDARD 11)
-#set(CMAKE_CXX_STANDARD_REQUIRED True)
-
-#add_definitions(-DRKAIQ)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 
 if (WIN32)
@@ -23,11 +21,12 @@ endif ()
 
 
 set(PROJECT_SOURCES
-        main.c
+        main.cpp
         camir_control.c
         camrgb_control.c
         display.c
         rkdrm_display.c
+        aiq_control.cpp
 
 )
 

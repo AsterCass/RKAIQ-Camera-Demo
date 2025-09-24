@@ -9,3 +9,8 @@
 
 
 typedef void (*display_callback)(void *ptr, int fd, int fmt, int w, int h, int rotation);
+
+enum aiq_control_type {
+    AIQ_CONTROL_RGB,
+    AIQ_CONTROL_IR,
+};
